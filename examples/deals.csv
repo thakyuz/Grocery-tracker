@@ -1,0 +1,4 @@
+store,item,sale_price,regular_price,brand,name,size,category,unit,limit,coupon
+fred_meyer,"Tillamook Cheese 7-8 oz, select varieties",3.49,4.99,Tillamook,cheese,7-8 oz,dairy,each,,yes
+safeway,Starbucks Ground Coffee 10-12 oz,7.99,10.99,Starbucks,ground coffee,10-12 oz,coffee,each,,yes
+qfc,Fage Total Greek Yogurt 32 oz,4.99,6.49,Fage,total greek yogurt,32 oz,dairy,each,,

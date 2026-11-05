@@ -26,11 +26,13 @@ SENDER_STORES = {
     "kroger.com": None,  # shared; store guessed from the receipt body
     "metropolitan-market.com": "metmarket",
     "metropolitanmarket.com": "metmarket",
+    "groceryoutlet.com": "grocery_outlet",
 }
 
 STORE_WORDS = {
     "safeway": "safeway", "fred meyer": "fred_meyer", "fredmeyer": "fred_meyer",
     "qfc": "qfc", "quality food": "qfc", "metropolitan market": "metmarket",
+    "grocery outlet": "grocery_outlet",
 }
 
 

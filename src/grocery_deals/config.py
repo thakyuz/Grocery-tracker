@@ -6,12 +6,20 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-STORES = ("safeway", "fred_meyer", "qfc", "metmarket")
+STORES = ("safeway", "fred_meyer", "qfc", "metmarket", "grocery_outlet")
 STORE_LABELS = {
     "safeway": "Safeway",
     "fred_meyer": "Fred Meyer",
     "qfc": "QFC",
     "metmarket": "Metropolitan Market",
+    "grocery_outlet": "Grocery Outlet",
+}
+
+# Stores without an API: their weekly ad (URL or file) is read by Claude.
+AD_SOURCE_VARS = {
+    "safeway": "SAFEWAY_AD_SOURCE",
+    "metmarket": "METMARKET_AD_SOURCE",
+    "grocery_outlet": "GROCERY_OUTLET_AD_SOURCE",
 }
 
 
@@ -61,11 +69,7 @@ class Settings:
     def from_env(cls) -> "Settings":
         load_dotenv()
         env = os.environ.get
-        ad_sources = {}
-        if env("SAFEWAY_AD_SOURCE"):
-            ad_sources["safeway"] = env("SAFEWAY_AD_SOURCE", "")
-        if env("METMARKET_AD_SOURCE"):
-            ad_sources["metmarket"] = env("METMARKET_AD_SOURCE", "")
+        ad_sources = {store: env(var, "") for store, var in AD_SOURCE_VARS.items() if env(var)}
         return cls(
             db_path=env("GROCERY_DB", "data/grocery.db"),
             out_dir=env("GROCERY_OUT_DIR", "out"),

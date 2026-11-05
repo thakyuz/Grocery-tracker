@@ -28,7 +28,8 @@ class AdDeal(BaseModel):
     category: Optional[str] = Field(None, description="Short grocery category, e.g. dairy, produce, meat, coffee")
     sale_price: float = Field(description="Effective price for ONE unit. '2 for $5' -> 2.50; '$3.99/lb' -> 3.99")
     price_unit: Optional[str] = Field(None, description="'each' or 'lb' (or another unit if priced by weight/volume)")
-    regular_price: Optional[float] = Field(None, description="Regular price for one unit if shown, else null")
+    regular_price: Optional[float] = Field(
+        None, description="Regular price for one unit if shown (including 'compare at' / 'elsewhere' prices), else null")
     deal_limit: Optional[int] = Field(None, description="Purchase limit if stated")
     coupon_required: bool = Field(False, description="True if a digital coupon, loyalty card clip or 'with coupon' is required")
 
@@ -53,7 +54,7 @@ class ReceiptLine(BaseModel):
 
 
 class Receipt(BaseModel):
-    store: Optional[str] = Field(None, description="One of: safeway, fred_meyer, qfc, metmarket, or null")
+    store: Optional[str] = Field(None, description="One of: safeway, fred_meyer, qfc, metmarket, grocery_outlet, or null")
     date: Optional[str] = Field(None, description="Purchase date YYYY-MM-DD")
     lines: list[ReceiptLine] = Field(description="Only purchased items: skip totals, tax, payment, coupons-only lines")
 
@@ -109,6 +110,7 @@ AD_INSTRUCTIONS = """This is a grocery store's weekly ad for {store}.
 List every individual deal. Rules:
 - One entry per product line; split combined offers ("Tillamook Cheese or Butter") only if prices differ.
 - sale_price is the effective price for ONE unit (multi-buy "2/$5" -> 2.50; "Buy 1 Get 1" -> half the regular price if shown).
+- If the ad shows a "compare at", "elsewhere" or "retail" price instead of a regular price, use it as regular_price.
 - Mark coupon_required when the price needs a digital coupon, loyalty clip or "with coupon".
 - Skip non-grocery items, store services and generic banners."""
 

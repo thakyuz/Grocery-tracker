@@ -24,6 +24,8 @@ HOUSEHOLD = [
     ("BEN JERRY HALF BAKED", "Ben & Jerry's", "half baked ice cream", 16, "oz", "frozen", 30, 5.99, "qfc", True),
     ("TILLAMOOK BUTTER 1LB", "Tillamook", "salted butter", 1, "lb", "dairy", 25, 6.49, "fred_meyer", False),
     ("LACROIX LIME 8PK", "LaCroix", "lime sparkling water", 8, "ct", "beverages", 12, 4.99, "safeway", True),
+    ("KIND DK CHOC NUT 12CT", "KIND", "dark chocolate nuts and sea salt bars", 12, "ct", "snacks", 18, 12.99,
+     "grocery_outlet", True),
 ]
 
 AD = {
@@ -59,6 +61,12 @@ AD = {
                8.49, source="demo"),
         DealIn("metmarket", "Metropolitan Market Cookies 6 ct", 5.99, None, "cookies", "6 ct", "bakery", 7.99,
                source="demo"),
+    ],
+    "grocery_outlet": [
+        DealIn("grocery_outlet", "KIND Bars Dark Chocolate Nuts & Sea Salt 12 ct, compare at $16.99", 8.99, "KIND",
+               "dark chocolate nuts and sea salt bars", "12 ct", "snacks", 16.99, source="demo"),
+        DealIn("grocery_outlet", "Tillamook Ice Cream 48 oz, compare at $7.49", 3.99, "Tillamook", "ice cream",
+               "48 oz", "frozen", 7.49, source="demo"),
     ],
 }
 

@@ -1,4 +1,5 @@
-"""Weekly ad extraction for stores without an API (Safeway, Metropolitan Market).
+"""Weekly ad extraction for stores without an API (Safeway, Metropolitan Market,
+Grocery Outlet).
 
 Point it at the ad as a URL or local file (PDF, image, HTML or text) and the
 LLM turns it into structured deal lines. Kept deliberately small so it is easy

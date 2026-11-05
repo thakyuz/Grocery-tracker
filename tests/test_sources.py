@@ -93,3 +93,25 @@ def test_email_receipt(conn, monkeypatch):
     assert receipts.import_email_bytes(conn, raw, "m") == 0
     row = conn.execute("SELECT date, store FROM purchase").fetchone()
     assert tuple(row) == ("2026-11-02", "safeway")
+
+
+def test_grocery_outlet_configured_and_receipts_recognized(monkeypatch):
+    from grocery_deals.config import Settings
+
+    monkeypatch.setenv("GROCERY_OUTLET_AD_SOURCE", "https://example.com/go-ad.pdf")
+    s = Settings.from_env()
+    assert s.ad_sources["grocery_outlet"] == "https://example.com/go-ad.pdf"
+    assert "grocery_outlet" in s.configured_stores()
+    assert receipts.guess_store("Thanks for shopping at Grocery Outlet Bargain Market") == "grocery_outlet"
+    assert receipts.SENDER_STORES["groceryoutlet.com"] == "grocery_outlet"
+
+
+def test_flyer_ingest_grocery_outlet_compare_at(conn, monkeypatch, tmp_path):
+    ad = tmp_path / "go.pdf"
+    ad.write_bytes(b"%PDF-1.4 fake")
+    monkeypatch.setattr(flyer, "extract_ad", lambda *a, **k: [llm.AdDeal(
+        raw_text="Tillamook Ice Cream 48 oz, compare at $7.49", brand="Tillamook", name="ice cream",
+        size_text="48 oz", sale_price=3.99, regular_price=7.49)])
+    assert flyer.ingest(conn, "grocery_outlet", str(ad), WEEK, "m") == 1
+    row = conn.execute("SELECT store, regular_price FROM deal").fetchone()
+    assert tuple(row) == ("grocery_outlet", 7.49)

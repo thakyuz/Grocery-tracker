@@ -1,7 +1,7 @@
 # Grocery Deals Tracker
 
-A personal app that pulls weekly deals from **Safeway, Fred Meyer, QFC and
-Metropolitan Market**, matches them against your purchase history, and sends a
+A personal app that pulls weekly deals from **Safeway, Fred Meyer, QFC,
+Metropolitan Market and Grocery Outlet**, matches them against your purchase history, and sends a
 Wednesday-morning digest of *your* items on sale, ranked by savings.
 
 This is the MVP from the "Grocery Deals App — Project Plan": weekly deal
@@ -9,10 +9,10 @@ ingestion, purchase-history import, matching, scoring, an email digest, price
 history from day one, and a basic list page.
 
 ```
-receipts (CSV / Gmail / photos) ─┐
-Kroger API (Fred Meyer, QFC)  ───┼─► SQLite ─► match ─► cadence ─► score ─► digest (email + HTML)
-Safeway / Met Market ad (LLM) ───┘        ▲                                   │
-                                          └──── your review answers ◄─────────┘
+receipts (CSV / Gmail / photos)  ─┐
+Kroger API (Fred Meyer, QFC)     ─┼─► SQLite ─► match ─► cadence ─► score ─► digest (email + HTML)
+Safeway / Met Market /            │      ▲                                    │
+  Grocery Outlet ads (LLM)       ─┘      └───── your review answers ◄─────────┘
 ```
 
 ## Quick start
@@ -36,8 +36,9 @@ grocery serve --port 8000            # basic web page (uses $GROCERY_DB)
    find your stores with `grocery kroger-locations --zip 98101`, and set `KROGER_LOCATIONS`.
    The Kroger API has no "all promos" endpoint, so the app searches for your frequent products
    (plus `KROGER_EXTRA_TERMS`) at each location and keeps the promo prices. Every price it sees goes into price history.
-4. **Safeway + Metropolitan Market**: set `SAFEWAY_AD_SOURCE` / `METMARKET_AD_SOURCE` to the weekly ad
-   URL or a downloaded PDF/image. Claude extracts the deal lines. One-off: `grocery ingest --store safeway --file ad.pdf`.
+4. **Safeway, Metropolitan Market, Grocery Outlet**: set `SAFEWAY_AD_SOURCE`, `METMARKET_AD_SOURCE` and
+   `GROCERY_OUTLET_AD_SOURCE` to the weekly ad URL or a downloaded PDF/image. Grocery Outlet ads show
+   "compare at" prices rather than regular prices; those are used as the regular price. Claude extracts the deal lines. One-off: `grocery ingest --store safeway --file ad.pdf`.
    Manual fallback for any store: `grocery import-deals deals.csv` (see `examples/deals.csv`).
 5. Run the week once by hand, then schedule it (`examples/crontab`):
 

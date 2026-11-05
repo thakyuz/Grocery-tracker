@@ -42,11 +42,12 @@ def test_demo_end_to_end(conn):
     cadence.rebuild_cadence(conn, TODAY)
     stats = matching.match_deals(conn, WEEK)
     assert stats["fuzzy"] >= 4
-    d = build_digest(conn, WEEK, ["safeway", "fred_meyer", "qfc", "metmarket"], today=TODAY)
+    d = build_digest(conn, WEEK, ["safeway", "fred_meyer", "qfc", "metmarket", "grocery_outlet"], today=TODAY)
     assert len(d.tier1) >= 4
     assert d.tier1 == sorted(d.tier1, key=lambda i: i.score, reverse=True)
     assert all(i.discount > 0 for i in d.tier1)
     assert not d.alerts
+    assert any(i.store == "grocery_outlet" for i in d.tier1)
     assert any("confirm with `grocery review`" in i.advice for i in d.tier2)
     text, page = render_text(d), render_html(d)
     assert "Your items on sale" in text and "<table>" in page

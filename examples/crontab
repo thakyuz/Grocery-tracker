@@ -1,0 +1,3 @@
+# Weekly ads drop Wednesday; run the digest at 6:47am every Wednesday.
+# Adjust the path to your checkout and virtualenv.
+47 6 * * 3  cd /home/you/grocery-tracker && .venv/bin/grocery weekly --send >> data/weekly.log 2>&1
